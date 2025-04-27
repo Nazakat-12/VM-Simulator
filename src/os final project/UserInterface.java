@@ -1,35 +1,22 @@
 package our_os_project;
 
-import java.awt.EventQueue;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import java.awt.Font;
-import java.awt.Color;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import javax.swing.*;
+import javax.swing.border.*;
+import java.awt.event.*;
 import java.util.ArrayList;
-import java.awt.event.ActionEvent;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import java.awt.Component;
-import javax.swing.Box;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-
-import javax.swing.JScrollPane;
+import javax.swing.table.*;
 
 public class UserInterface {
 	private ArrayList<Process> P;
-	private int algorithmFlag=1;
+	private int algorithmFlag = 1;
 	private int user_ram = 0;
-	private int total_CPU_time=0;
-	private int total_CS=0;
-	private int total_faults=0;
-	private int total_cycles=0;
-	private float avg_WT=0;
-	private float avg_TAT=0;
+	private int total_CPU_time = 0;
+	private int total_CS = 0;
+	private int total_faults = 0;
+	private int total_cycles = 0;
+	private float avg_WT = 0;
+	private float avg_TAT = 0;
 	private JFrame frmVirtualMemorySimulator;
 	private JTextField textField1;
 	private JTextField textField2;
@@ -37,29 +24,18 @@ public class UserInterface {
 	private JLabel lbl1;
 	private JLabel lbl2;
 	private JLabel lbl4;
-	private JLabel lbl5;
-	private JLabel lbl6;
-	private JLabel lbl7;
 	private JLabel lbl8;
 	private JButton btn1;
-	private JComboBox comboBox1;
-	private JComboBox comboBox2;
-	private JComboBox comboBox4;
-	private JPanel panel;
-	private JPanel panel_1;
+	private JComboBox<String> comboBox1;
+	private JComboBox<String> comboBox2;
+	private JComboBox<String> comboBox4;
 	private JScrollPane scrollPane;
 	private JTextField textField3;
 	private JTextField textField6;
 	private JTextField textField5;
 	private JTextField textField4;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
-
-		System.out.println("This code is outside of the thread");
-
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -72,261 +48,238 @@ public class UserInterface {
 		});
 	}
 
-	/**
-	 * Create the application.
-	 */
 	public UserInterface() {
 		initialize();
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
 	private void initialize() {
+		// Main frame setup
 		frmVirtualMemorySimulator = new JFrame();
-		frmVirtualMemorySimulator.setForeground(new Color(0, 0, 0));
-		frmVirtualMemorySimulator.setTitle("Virtual Memory Simulator");
-		frmVirtualMemorySimulator.setBounds(100, 100, 867, 523);
+		frmVirtualMemorySimulator.setTitle("NEO Virtual Memory Simulator");
+		frmVirtualMemorySimulator.setBounds(100, 100, 950, 650);
 		frmVirtualMemorySimulator.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmVirtualMemorySimulator.getContentPane().setBackground(new Color(0, 18, 30));
 		frmVirtualMemorySimulator.getContentPane().setLayout(null);
 
-		lbl1 = new JLabel("Select File : ");
-		lbl1.setBackground(new Color(255, 204, 204));
-		lbl1.setForeground(Color.BLACK);
-		lbl1.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lbl1.setBounds(33, 22, 84, 26);
-		frmVirtualMemorySimulator.getContentPane().add(lbl1);
+		// Custom font
+		Font futura = new Font("Futura", Font.PLAIN, 14);
+		Font futuraBold = new Font("Futura", Font.BOLD, 14);
 
-		lbl2 = new JLabel("Select memory size : ");
-		lbl2.setForeground(Color.BLACK);
-		lbl2.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lbl2.setBackground(new Color(255, 204, 204));
-		lbl2.setBounds(33, 62, 144, 26);
-		frmVirtualMemorySimulator.getContentPane().add(lbl2);
+		// Left control panel
+		JPanel controlPanel = new JPanel();
+		controlPanel.setBounds(20, 20, 400, 580);
+		controlPanel.setBackground(new Color(10, 30, 45));
+		controlPanel.setBorder(new MatteBorder(1, 1, 1, 1, new Color(80, 80, 100)));
+		controlPanel.setLayout(null);
+		frmVirtualMemorySimulator.getContentPane().add(controlPanel);
 
-		lbl4 = new JLabel("Select page replacement algorithm : ");
-		lbl4.setForeground(Color.BLACK);
-		lbl4.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lbl4.setBackground(new Color(255, 204, 204));
-		lbl4.setBounds(33, 108, 227, 26);
-		frmVirtualMemorySimulator.getContentPane().add(lbl4);
+		// Right results panel
+		JPanel resultsPanel = new JPanel();
+		resultsPanel.setBounds(440, 20, 750, 580);
+		resultsPanel.setBackground(new Color(10, 30, 45));
+		resultsPanel.setBorder(new MatteBorder(1, 1, 1, 1, new Color(80, 80, 100)));
+		resultsPanel.setLayout(null);
+		frmVirtualMemorySimulator.getContentPane().add(resultsPanel);
 
-		btn1 = new JButton("Simulate");
-		btn1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				jButton1ActionPerformed(e);
+		// ===== CONTROL PANEL ELEMENTS =====
+		// Title
+		JLabel titleLabel = new JLabel("VIRTUAL MEMORY SIMULATOR");
+		titleLabel.setBounds(50, 20, 300, 30);
+		titleLabel.setFont(new Font("Futura", Font.BOLD, 18));
+		titleLabel.setForeground(new Color(0, 150, 200));
+		controlPanel.add(titleLabel);
+
+		// File selection
+		lbl1 = createLabel("Select File:", 50, 70, futuraBold, new Color(200, 220, 255));
+		controlPanel.add(lbl1);
+
+		comboBox1 = createComboBox(new String[]{"use configuration file", "use generated file"},
+				50, 95, 300, 30, futura, new Color(40, 40, 60), new Color(0, 200, 255));
+		comboBox1.addActionListener(e -> jComboBox1ActionPerformed(e));
+		controlPanel.add(comboBox1);
+
+		// Memory size selection
+		lbl2 = createLabel("Select memory size:", 50, 150, futuraBold, new Color(200, 220, 255));
+		controlPanel.add(lbl2);
+
+		comboBox2 = createComboBox(new String[]{"10K ,40 frames", "50K ,200 frames", "125K , 500 frames"},
+				50, 175, 300, 30, futura, new Color(40, 40, 60), new Color(0, 200, 255));
+		comboBox2.addActionListener(e -> jComboBox2ActionPerformed(e));
+		controlPanel.add(comboBox2);
+
+		// Algorithm selection
+		lbl4 = createLabel("Select page replacement algorithm:", 50, 230, futuraBold, new Color(200, 220, 255));
+		controlPanel.add(lbl4);
+
+		comboBox4 = createComboBox(new String[]{"FIFO", "Second-chance FIFO", "LRU"},
+				50, 255, 300, 30, futura, new Color(40, 40, 60), new Color(0, 200, 255));
+		comboBox4.addActionListener(e -> jComboBox4ActionPerformed(e));
+		controlPanel.add(comboBox4);
+
+		// Simulate button
+		btn1 = new JButton("RUN SIMULATION");
+		btn1.setBounds(100, 320, 200, 45);
+		btn1.setFont(new Font("Futura", Font.BOLD, 14));
+		btn1.setForeground(Color.WHITE);
+		btn1.setBackground(new Color(0, 150, 200));
+		btn1.setBorder(new MatteBorder(1, 1, 1, 1, new Color(0, 200, 255)));
+		btn1.setFocusPainted(false);
+		btn1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+		// Hover effects
+		btn1.addMouseListener(new MouseAdapter() {
+			public void mouseEntered(MouseEvent evt) {
+				btn1.setBackground(new Color(0, 180, 230));
+			}
+			public void mouseExited(MouseEvent evt) {
+				btn1.setBackground(new Color(0, 150, 200));
 			}
 		});
-		btn1.setForeground(new Color(255, 255, 255));
-		btn1.setBackground(new Color(0, 0, 51));
-		btn1.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		btn1.setBounds(85, 171, 227, 35);
-		frmVirtualMemorySimulator.getContentPane().add(btn1);
 
-		comboBox1 = new JComboBox();
-		comboBox1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				jComboBox1ActionPerformed(e);
-			}
-		});
-		comboBox1.setEditable(true);
-		comboBox1.setModel(new DefaultComboBoxModel(new String[] { "use configuration file", "use generated file" }));
-		comboBox1.setSelectedItem("select file");
-		comboBox1.setBounds(248, 25, 175, 22);
-		frmVirtualMemorySimulator.getContentPane().add(comboBox1);
+		btn1.addActionListener(e -> jButton1ActionPerformed(e));
+		controlPanel.add(btn1);
 
-		comboBox2 = new JComboBox();
-		comboBox2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				jComboBox2ActionPerformed(e);
-			}
-		});
-		comboBox2.setModel(
-				new DefaultComboBoxModel(new String[] { "10K ,40 frames", "50K  ,200 frames", "125K  , 500 frames" }));
-		comboBox2.setEditable(true);
-		comboBox2.setSelectedItem("select RAM size");
-		comboBox2.setBounds(248, 65, 175, 22);
-		frmVirtualMemorySimulator.getContentPane().add(comboBox2);
+		// ===== RESULTS PANEL ELEMENTS =====
+		// Results title
+		JLabel resultsTitle = new JLabel("SIMULATION RESULTS");
+		resultsTitle.setBounds(30, 20, 400, 30);
+		resultsTitle.setFont(new Font("Futura", Font.BOLD, 18));
+		resultsTitle.setForeground(new Color(20, 200, 255));
+		resultsPanel.add(resultsTitle);
 
-		comboBox4 = new JComboBox();
-		comboBox4.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				jComboBox4ActionPerformed(e);
-			}
-		});
-		comboBox4.setModel(new DefaultComboBoxModel(new String[] { "FIFO", "Second-chance FIFO", "LRU" }));
-		comboBox4.setEditable(true);
-		comboBox4.setSelectedItem("select algorithm");
-		comboBox4.setBounds(248, 111, 175, 22);
-		frmVirtualMemorySimulator.getContentPane().add(comboBox4);
+		// Stats panel
+		JPanel statsPanel = new JPanel();
+		statsPanel.setBounds(30, 60, 700, 220);
+		statsPanel.setBackground(new Color(8, 95, 93));
+		statsPanel.setBorder(new MatteBorder(1, 1, 1, 1, new Color(80, 80, 100)));
+		statsPanel.setLayout(null);
+		resultsPanel.add(statsPanel);
 
-		panel = new JPanel();
-		panel.setBackground(new Color(0, 0, 51));
-		panel.setBounds(530, 22, 293, 238);
-		frmVirtualMemorySimulator.getContentPane().add(panel);
-		panel.setLayout(null);
+		// Stats labels and fields
+		addStatRow(statsPanel, "Total page faults:", 20, 20, futuraBold);
+		textField1 = createResultField(200, 20, futura);
+		statsPanel.add(textField1);
 
-		lbl5 = new JLabel("Simulation Results:");
-		lbl5.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lbl5.setForeground(new Color(255, 255, 255));
-		lbl5.setBounds(10, 11, 121, 14);
-		panel.add(lbl5);
+		addStatRow(statsPanel, "Total cycles:", 20, 50, futuraBold);
+		textField2 = createResultField(200, 50, futura);
+		statsPanel.add(textField2);
 
-		lbl6 = new JLabel("total page faults :");
-		lbl6.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lbl6.setForeground(new Color(255, 255, 255));
-		lbl6.setBounds(39, 36, 111, 20);
-		panel.add(lbl6);
+		addStatRow(statsPanel, "Total context switches:", 20, 80, futuraBold);
+		textField3 = createResultField(200, 80, futura);
+		statsPanel.add(textField3);
 
-		lbl7 = new JLabel("total cyclesFC :");
-		lbl7.setForeground(Color.WHITE);
-		lbl7.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lbl7.setBounds(39, 67, 111, 20);
-		panel.add(lbl7);
+		addStatRow(statsPanel, "Total CPU time:", 20, 110, futuraBold);
+		textField4 = createResultField(200, 110, futura);
+		statsPanel.add(textField4);
 
-		textField1 = new JTextField();
-		textField1.setBounds(185, 36, 48, 20);
-		panel.add(textField1);
-		textField1.setColumns(10);
+		addStatRow(statsPanel, "Avg wait time:", 20, 140, futuraBold);
+		textField5 = createResultField(200, 140, futura);
+		statsPanel.add(textField5);
 
-		textField2 = new JTextField();
-		textField2.setColumns(10);
-		textField2.setBounds(185, 67, 48, 20);
-		panel.add(textField2);
+		addStatRow(statsPanel, "Avg turn around time:", 20, 170, futuraBold);
+		textField6 = createResultField(200, 170, futura);
+		statsPanel.add(textField6);
 
-		JLabel lblTotalContextSwitches = new JLabel("total context switches :");
-		lblTotalContextSwitches.setForeground(Color.WHITE);
-		lblTotalContextSwitches.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblTotalContextSwitches.setBounds(39, 95, 136, 20);
-		panel.add(lblTotalContextSwitches);
+		// Process info title
+		lbl8 = new JLabel("PROCESS INFORMATION");
+		lbl8.setBounds(30, 300, 400, 30);
+		lbl8.setFont(new Font("Futura", Font.BOLD, 16));
+		lbl8.setForeground(new Color(0, 200, 255));
+		resultsPanel.add(lbl8);
 
-		textField3 = new JTextField();
-		textField3.setColumns(10);
-		textField3.setBounds(185, 98, 48, 20);
-		panel.add(textField3);
+		// Table panel
+		JPanel tablePanel = new JPanel();
+		tablePanel.setBounds(30, 330, 700, 220);
+		tablePanel.setBackground(new Color(8, 95, 93));
+		tablePanel.setBorder(new MatteBorder(1, 1, 1, 1, new Color(80, 80, 100)));
+		tablePanel.setLayout(new BorderLayout());
+		resultsPanel.add(tablePanel);
 
-		JLabel lblTotalCpuTime = new JLabel("total cpu time :");
-		lblTotalCpuTime.setForeground(Color.WHITE);
-		lblTotalCpuTime.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblTotalCpuTime.setBounds(39, 124, 111, 20);
-		panel.add(lblTotalCpuTime);
-
-		JLabel lblAvgWaitTime = new JLabel("avg wait time:");
-		lblAvgWaitTime.setForeground(Color.WHITE);
-		lblAvgWaitTime.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblAvgWaitTime.setBounds(39, 155, 111, 20);
-		panel.add(lblAvgWaitTime);
-
-		JLabel lblAvgTurnAround = new JLabel("avg turn around time:");
-		lblAvgTurnAround.setForeground(Color.WHITE);
-		lblAvgTurnAround.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblAvgTurnAround.setBounds(39, 180, 136, 20);
-		panel.add(lblAvgTurnAround);
-
-		textField6 = new JTextField();
-		textField6.setColumns(10);
-		textField6.setBounds(185, 180, 48, 20);
-		panel.add(textField6);
-
-		textField5 = new JTextField();
-		textField5.setColumns(10);
-		textField5.setBounds(185, 155, 48, 20);
-		panel.add(textField5);
-
-		textField4 = new JTextField();
-		textField4.setColumns(10);
-		textField4.setBounds(185, 124, 48, 20);
-		panel.add(textField4);
-
-		panel_1 = new JPanel();
-		panel_1.setForeground(new Color(0, 0, 102));
-		panel_1.setBounds(10, 271, 813, 221);
-		frmVirtualMemorySimulator.getContentPane().add(panel_1);
-		panel_1.setLayout(null);
-
-		scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 22, 793, 164);
-		panel_1.add(scrollPane);
-
+		// Table setup
 		table = new JTable();
-		scrollPane.setViewportView(table);
-		table.setModel(new DefaultTableModel(new Object[][] {}, new String[] { "PID", "duration(burst time)",
-				"start time", "finish time", "turn around time", "wait time", "# of faults", "# of pages" }));
-		table.getColumnModel().getColumn(0).setPreferredWidth(53);
-		table.getColumnModel().getColumn(0).setMinWidth(14);
-		table.getColumnModel().getColumn(1).setPreferredWidth(117);
-		table.getColumnModel().getColumn(4).setPreferredWidth(97);
-		table.getColumnModel().getColumn(7).setPreferredWidth(74);
+		table.setBackground(new Color(8, 95, 93));
+		table.setForeground(Color.cyan);
+		table.setGridColor(new Color(0, 80, 100));
+		table.setFont(futura);
+		table.setRowHeight(25);
+		table.setSelectionBackground(new Color(0, 150, 200));
+		table.setSelectionForeground(Color.cyan);
+		table.setShowGrid(true);
 
-		lbl8 = new JLabel("Processes info & status:");
-		lbl8.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lbl8.setBounds(10, 246, 190, 14);
-		frmVirtualMemorySimulator.getContentPane().add(lbl8);
+		// Table header styling
+		JTableHeader header = table.getTableHeader();
+		header.setBackground(new Color(30, 30, 45));
+		header.setForeground(new Color(0, 200, 255));
+		header.setFont(futuraBold);
+
+		// Scroll pane
+		scrollPane = new JScrollPane(table);
+		scrollPane.setBorder(null);
+		tablePanel.add(scrollPane, BorderLayout.CENTER);
+
+		// Table model
+		table.setModel(new DefaultTableModel(new Object[][] {},
+				new String[] { "PID", "Duration", "Start", "Finish", "TAT", "Wait", "Faults", "Pages" }));
 	}
 
-	private void jComboBox1ActionPerformed(java.awt.event.ActionEvent e) {
+	// Action methods (keep your original implementations)
+	private void jComboBox1ActionPerformed(ActionEvent e) {
 		FileInput fi = new FileInput();
 		switch (comboBox1.getSelectedIndex()) {
-		case (0): { // Configuration file
-			P = fi.readConfigurationFile();
-			break;
-		}
-		case (1): { // Generated file
-			P = fi.readGeneratedFile();
-			break;
-		}
-		default:
+			case 0: // Configuration file
+				P = fi.readConfigurationFile();
+				break;
+			case 1: // Generated file
+				P = fi.readGeneratedFile();
+				break;
+			default:
+				break;
 		}
 	}
 
-	private void jComboBox2ActionPerformed(java.awt.event.ActionEvent e) {
+	private void jComboBox2ActionPerformed(ActionEvent e) {
 		switch (comboBox2.getSelectedIndex()) {
-		case (0): {
-			user_ram = 40;
-			break;
-		}
-		case (1): {
-			user_ram = 200;
-			break;
-		}
-		case (2): {
-			user_ram = 500;
-			break;
-		}
-		default:
+			case 0:
+				user_ram = 40;
+				break;
+			case 1:
+				user_ram = 200;
+				break;
+			case 2:
+				user_ram = 500;
+				break;
+			default:
+				break;
 		}
 	}
 
-	private void jComboBox4ActionPerformed(java.awt.event.ActionEvent e) {
+	private void jComboBox4ActionPerformed(ActionEvent e) {
 		switch (comboBox4.getSelectedIndex()) {
-		case (0): {
-			algorithmFlag = 1; // fifo
-			break;
-		}
-		case (1): {
-			algorithmFlag = 2; // econd chance
-			break;
-		}
-		case (2): {
-			algorithmFlag = 3;// lru
-			break;
-		}
-		default:
+			case 0:
+				algorithmFlag = 1; // fifo
+				break;
+			case 1:
+				algorithmFlag = 2; // second chance
+				break;
+			case 2:
+				algorithmFlag = 3; // lru
+				break;
+			default:
+				break;
 		}
 	}
 
-	private void jButton1ActionPerformed(java.awt.event.ActionEvent e) {
-		
+	private void jButton1ActionPerformed(ActionEvent e) {
 		MyThread thread = new MyThread();
-		// clear table
-				DefaultTableModel dm = (DefaultTableModel) table.getModel();
-				int rowCount = dm.getRowCount();
-				// Remove rows one by one from the end of the table
-				for (int i = rowCount - 1; i >= 0; i--) {
-					dm.removeRow(i);
-				}
-				
-		// change array list to array
+
+		// Clear table
+		DefaultTableModel dm = (DefaultTableModel) table.getModel();
+		int rowCount = dm.getRowCount();
+		for (int i = rowCount - 1; i >= 0; i--) {
+			dm.removeRow(i);
+		}
+
+		// Change array list to array
 		Process[] ar_p = new Process[P.size()];
 		ar_p = P.toArray(new Process[0]);
 		thread.setFlag(algorithmFlag);
@@ -345,11 +298,7 @@ public class UserInterface {
 		avg_WT = thread.getF().getAVG_WT();
 		avg_TAT = thread.getF().getAVG_TAT();
 
-		System.out.println("Total number of faults = " + total_faults);
-		//System.out.println("number of faults for proccess  "+ i+ total_faults);
-		
-		
-		// initialize table cells
+		// Update text fields
 		textField1.setText(String.valueOf(total_faults));
 		textField2.setText(String.valueOf(total_cycles));
 		textField3.setText(String.valueOf(total_CS));
@@ -357,15 +306,70 @@ public class UserInterface {
 		textField5.setText(String.valueOf(avg_WT));
 		textField6.setText(String.valueOf(avg_TAT));
 
-		// add to table
+		// Add to table
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		for (int k = 0; k < P.size(); k++) {
 			int finish_time = P.get(k).getTAtime() + P.get(k).getArrivalTime();
-			model.addRow(new Object[] { P.get(k).getProcessID(), P.get(k).getDuration(),
-					String.valueOf(P.get(k).getArrivalTime()), String.valueOf(finish_time),
-					String.valueOf(ar_p[k].getTAtime()), String.valueOf(ar_p[k].getWTime()),
-					String.valueOf(ar_p[k].getFaultsNumber()), P.get(k).getSize() });
+			model.addRow(new Object[] {
+					P.get(k).getProcessID(),
+					P.get(k).getDuration(),
+					String.valueOf(P.get(k).getArrivalTime()),
+					String.valueOf(finish_time),
+					String.valueOf(ar_p[k].getTAtime()),
+					String.valueOf(ar_p[k].getWTime()),
+					String.valueOf(ar_p[k].getFaultsNumber()),
+					P.get(k).getSize()
+			});
 		}
-		
+	}
+
+	// Helper methods
+	private JLabel createLabel(String text, int x, int y, Font font, Color color) {
+		JLabel label = new JLabel(text);
+		label.setBounds(x, y, 300, 20);
+		label.setFont(font);
+		label.setForeground(color);
+		return label;
+	}
+
+	private JComboBox<String> createComboBox(String[] items, int x, int y, int width, int height,
+											 Font font, Color bg, Color fg) {
+		JComboBox<String> comboBox = new JComboBox<>(items);
+		comboBox.setBounds(x, y, width, height);
+		comboBox.setFont(font);
+		comboBox.setBackground(bg);
+		comboBox.setForeground(fg);
+		comboBox.setBorder(new MatteBorder(1, 1, 1, 1, new Color(80, 80, 100)));
+		comboBox.setRenderer(new DefaultListCellRenderer() {
+			@Override
+			public Component getListCellRendererComponent(JList<?> list, Object value, int index,
+														  boolean isSelected, boolean cellHasFocus) {
+				super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+				setBackground(isSelected ? new Color(0, 150, 200) : bg);
+				setForeground(isSelected ? Color.WHITE : fg);
+				return this;
+			}
+		});
+		return comboBox;
+	}
+
+	private JTextField createResultField(int x, int y, Font font) {
+		JTextField field = new JTextField();
+		field.setBounds(x, y, 150, 25);
+		field.setFont(font);
+		field.setBackground(new Color(50, 50, 70));
+		field.setForeground(Color.cyan);
+		field.setBorder(new MatteBorder(1, 1, 1, 1, new Color(80, 80, 100)));
+		field.setEditable(false);
+		field.setHorizontalAlignment(JTextField.RIGHT);
+		return field;
+	}
+
+	private void addStatRow(JPanel panel, String text, int x, int y, Font font) {
+		JLabel label = new JLabel(text);
+		label.setBounds(x, y, 170, 25);
+		label.setFont(font);
+		label.setForeground(new Color(200, 220, 255));
+		panel.add(label);
 	}
 }
