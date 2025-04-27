@@ -1,26 +1,27 @@
-# Virtual-Memory-Management-Simulation
+# Virtual Memory Management Simulator
 
-I made this project with two of my colleagues for the ENCS3390 Operating Systems course. Eclipse development environment was used in the coding process of our virtual memory simulator, Using Java programming language.
+I Nazakat Ali 23k-2081 , developed this project for the Operating Systems course at FAST NUCES University. This virtual memory simulation was built using the Java programming language within the Intellij development environment.
 
-The project illustrates the concept of virtual memory management in a simulation that includes several aspects and concepts of an Operating System. It deals with memory traces, Page Faults, Scheduling using both Round Robin Algorithm and First-In-First-Out algorithm and different page replacement Algorithms, namely: FIFO, LRU, Second-chance FIFO. 
+The project offers a hands-on simulation of virtual memory management, capturing key concepts and techniques commonly found in Operating Systems. It covers areas like memory traces, page faults, and scheduling, integrating both the Round Robin and First-In-First-Out (FIFO) scheduling algorithms. Additionally, it demonstrates several page replacement algorithms, including FIFO, Least Recently Used (LRU), and Second-Chance FIFO.
 
 ***************************************************************
-PROJECT IMPLEMENTAION: 
+**Project Implementation:**
 
-several classes were made for each section of the simulation as below: 
+To structure the simulation, multiple classes were designed, each serving a specific role in the system:
 
-Process class:  Represents an object of a process with its corresponding attributes, such as Process ID, Arrival Time, Duration, and Page References. 
+- **Process Class:** Represents a process with its key attributes such as Process ID, Arrival Time, Duration, and Page References.
+  
+- **PageReplacement Class:** Implements various page replacement algorithms to manage memory more efficiently.
 
-PageReplacement class: Implements the page replacement policies and algorithms. 
+- **FileInput Class:** Handles the reading of a configuration file or generates a random configuration within defined limits.
 
-FileInput class: Reads the configuration file, or generates a random configuration file with respect to certain limitation in limits of each random element. 
+- **UserInterface Class:** Provides the Graphical User Interface (GUI) of the simulator, connecting the various algorithms and functions from different classes.
 
-UserInterface class: The Graphical User Interface (GUI) of the memory manager simulator. It calls all algorithms codes and functions from the different classes.
+- **MyThread Class:** Inherits from the Thread class and is used to create threads for various operations, as well as for each individual process in the simulation.
 
-MyThread class: Extends (Thread), is a subclass of the super class Thread. Aims to create Threads for the different functions used in the program. And also creates threads for each process.
+- **FCFS Class:** Implements the First-Come-First-Serve (FCFS) scheduling algorithm, calculating waiting time and turnaround time for each process, and computing the averages for all processes.
 
-FCFS class: Implements the FCFS scheduling Algorithm, and calculates the waiting time and turn-around time for each process, as well as their average values  for all processes.
 ***************************************************************
-HOW THE PROGRAM WORKS?
+**How the Program Works:**
 
-An interface appears to the user and gives him/her the ability to choose to work on data read from either a configuration file or a randomly generated file. Then the user selects the memory size and the page replacement algorithms to work on. Finally, by pressing the Simulate button, the results will appear on the interface.
+Upon launching the program, users are presented with an interface that allows them to select data either from a pre-existing configuration file or a randomly generated one. After choosing the memory size and page replacement algorithms, users can click the "Simulate" button to view the results. The simulation supports FIFO, LRU, and Second-Chance FIFO page replacement algorithms, offering insights into the performance of each algorithm in a memory management scenario.
